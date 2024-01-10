@@ -30,3 +30,4 @@ D:\code\github\mengtylulu\mengtylulu\obj\Debug\net8.0\refint\mengtylulu.dll
 D:\code\github\mengtylulu\mengtylulu\obj\Debug\net8.0\mengtylulu.pdb
 D:\code\github\mengtylulu\mengtylulu\obj\Debug\net8.0\mengtylulu.genruntimeconfig.cache
 D:\code\github\mengtylulu\mengtylulu\obj\Debug\net8.0\ref\mengtylulu.dll
+D:\code\github\mengtylulu\mengtylulu\obj\Debug\net8.0\mengtylulu.sourcelink.json

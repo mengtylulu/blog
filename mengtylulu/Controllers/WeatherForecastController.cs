@@ -12,15 +12,19 @@ namespace mengtylulu.Controllers
     };
 
         private readonly ILogger<WeatherForecastController> _logger;
+        private readonly IAnimal _IAnimal;
 
-        public WeatherForecastController(ILogger<WeatherForecastController> logger)
+
+        public WeatherForecastController(ILogger<WeatherForecastController> logger, IAnimal animal)
         {
             _logger = logger;
+            _IAnimal = animal;
         }
 
         [HttpGet(Name = "GetWeatherForecast")]
         public IEnumerable<WeatherForecast> Get()
         {
+            var test = _IAnimal.say();
             return Enumerable.Range(1, 5).Select(index => new WeatherForecast
             {
                 Date = DateOnly.FromDateTime(DateTime.Now.AddDays(index)),
