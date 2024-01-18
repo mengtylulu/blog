@@ -1,3 +1,4 @@
+using mengtylulu.DB;
 using Microsoft.AspNetCore.Mvc;
 
 namespace mengtylulu.Controllers
@@ -24,6 +25,8 @@ namespace mengtylulu.Controllers
         [HttpGet(Name = "GetWeatherForecast")]
         public IEnumerable<WeatherForecast> Get()
         {
+            PgConn conn = new PgConn();
+            conn.Connect();
             var test = _IAnimal.say();
             return Enumerable.Range(1, 5).Select(index => new WeatherForecast
             {
