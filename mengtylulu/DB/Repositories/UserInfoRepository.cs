@@ -26,12 +26,10 @@ namespace mengtylulu.DB.Repositories
                     }
                 };
                 int result = await command.ExecuteNonQueryAsync();
-                int i = 4;
                 return result;
             }
             catch (Exception e)
             {
-                await Console.Out.WriteLineAsync("测试");
                 throw new Exception(e.Message);
             }
             finally

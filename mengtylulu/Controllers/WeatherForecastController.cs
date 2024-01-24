@@ -1,4 +1,3 @@
-using mengtylulu.DB;
 using mengtylulu.DB.Interfaces;
 using mengtylulu.DB.Models;
 using mengtylulu.DB.Repositories;
@@ -28,15 +27,7 @@ namespace mengtylulu.Controllers
         [HttpGet(Name = "GetWeatherForecast")]
         public IEnumerable<WeatherForecast> Get()
         {
-            UserInfo userInfo = new UserInfo()
-            {
-                UserId = Guid.NewGuid(),
-                Email = "2324064873@qq.com",
-                Name = "tjt",
-                Password = "123456789",
-            };
-            IUserInfoRepository userInfoRepository = new UserInfoRepository();
-            var res = userInfoRepository.CreateAsync(userInfo);
+
 
             var test = _IAnimal.say();
             return Enumerable.Range(1, 5).Select(index => new WeatherForecast
@@ -47,5 +38,6 @@ namespace mengtylulu.Controllers
             })
             .ToArray();
         }
+
     }
 }
