@@ -10,6 +10,20 @@ builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 builder.Services.AddScoped<IAnimal, dog>();
 
+//¿çÓò
+builder.Services.AddCors(options =>
+{
+
+    options.AddPolicy("cors", p =>
+    {
+        p.AllowAnyHeader();
+        p.AllowAnyMethod();
+        p.AllowCredentials();
+        p.AllowAnyOrigin();
+        //p.SetIsOriginAllowed(p => true);
+    });
+});
+
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.
@@ -18,6 +32,7 @@ if (app.Environment.IsDevelopment())
     app.UseSwagger();
     app.UseSwaggerUI();
 }
+app.UseCors("cors");
 
 app.UseHttpsRedirection();
 
