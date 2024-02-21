@@ -13,15 +13,11 @@ builder.Services.AddScoped<IAnimal, dog>();
 //¿çÓò
 builder.Services.AddCors(options =>
 {
-
-    options.AddPolicy("cors", p =>
-    {
-        p.AllowAnyHeader();
-        p.AllowAnyMethod();
-        p.AllowCredentials();
-        p.AllowAnyOrigin();
-        //p.SetIsOriginAllowed(p => true);
-    });
+    options.AddDefaultPolicy(builder =>
+    builder.SetIsOriginAllowed(_ => true)
+    .AllowAnyMethod()
+    .AllowAnyHeader()
+    .AllowCredentials());
 });
 
 var app = builder.Build();
@@ -32,7 +28,9 @@ if (app.Environment.IsDevelopment())
     app.UseSwagger();
     app.UseSwaggerUI();
 }
-app.UseCors("cors");
+
+//app.UseCors("cors");
+app.UseCors();
 
 app.UseHttpsRedirection();
 
