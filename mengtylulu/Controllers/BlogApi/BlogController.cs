@@ -1,15 +1,19 @@
 ﻿using mengtylulu.ApiModel.BlogApi;
+using mengtylulu.ApiModel.DotNet.DependencyInjection.Interface;
 using mengtylulu.DB.BlogApi;
+using mengtylulu.DB.Interfaces;
 using mengtylulu.DB.Models;
 using Microsoft.AspNetCore.Mvc;
+using System.ComponentModel;
 using System.Net;
 
 namespace mengtylulu.Controllers.BlogApi
 {
     [ApiController]
-    [Route("[controller]")]
+    [Route("[controller]/[action]")]
     public class BlogController : ControllerBase
     {
+
         [HttpPost]
         public async Task<int> InsertBlog(InsertBlogInput input)
         {
@@ -27,5 +31,7 @@ namespace mengtylulu.Controllers.BlogApi
             var res = await blogDB.InsertAsync(blog);
             return res;
         }
+
+
     }
 }

@@ -1,4 +1,6 @@
 using mengtylulu;
+using mengtylulu.ApiModel.DotNet.DependencyInjection.Interface;
+using mengtylulu.ApiModel.DotNet.DependencyInjection.Model;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -8,7 +10,10 @@ builder.Services.AddControllers();
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
-builder.Services.AddScoped<IAnimal, dog>();
+
+builder.Services.AddScoped<ITestScoped, TestScoped>();
+builder.Services.AddSingleton<ITestSingleton, TestSingleton>();
+builder.Services.AddTransient<ITestTransient, TestTransient>();
 
 //¿çÓò
 builder.Services.AddCors(options =>
@@ -29,7 +34,7 @@ if (app.Environment.IsDevelopment())
     app.UseSwaggerUI();
 }
 
-//app.UseCors("cors");
+
 app.UseCors();
 
 app.UseHttpsRedirection();
@@ -37,5 +42,12 @@ app.UseHttpsRedirection();
 app.UseAuthorization();
 
 app.MapControllers();
+
+app.MapGet("/", (HttpRequest request) =>
+{
+    var userAgent = request.Headers.UserAgent;
+    var customHeader = request.Headers["x-custom-header"];
+    return Results.Ok(new { userAgent = userAgent, customHeader = customHeader });
+});
 
 app.Run();
