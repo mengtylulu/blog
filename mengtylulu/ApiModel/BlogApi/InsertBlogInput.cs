@@ -4,10 +4,10 @@ namespace mengtylulu.ApiModel.BlogApi
 {
     public class InsertBlogInput
     {
-        /// <summary>
-        /// 主键
-        /// </summary>
-        public Guid BlogId { get; set; }
+        ///// <summary>
+        ///// 主键
+        ///// </summary>
+        //public Guid BlogId { get; set; }
 
         /// <summary>
         /// 标题
@@ -24,19 +24,19 @@ namespace mengtylulu.ApiModel.BlogApi
         /// </summary>
         public string IpAddress { get; set; } = string.Empty;
 
-        /// <summary>
-        /// 创建时间
-        /// </summary>
-        public DateTime CreateTime { get; set; }
+        ///// <summary>
+        ///// 创建时间
+        ///// </summary>
+        //public DateTime CreateTime { get; set; }
 
-        /// <summary>
-        /// 更新时间
-        /// </summary>
-        public DateTime UpdateTime { get; set; }
+        ///// <summary>
+        ///// 更新时间
+        ///// </summary>
+        //public DateTime UpdateTime { get; set; }
 
-        /// <summary>
-        /// 类型主键
-        /// </summary>
-        public Guid TypeId { get; set; }
+        ///// <summary>
+        ///// 类型主键
+        ///// </summary>
+        //public Guid TypeId { get; set; }
     }
 }

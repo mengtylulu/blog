@@ -16,9 +16,9 @@ namespace mengtylulu.Controllers.BlogApi
             BlogDB blogDB = new BlogDB();
             Blog blog = new Blog()
             {
-                BlogId = input.BlogId,
+                BlogId = new Guid(),
                 Content = input.Content,
-                CreateTime = input.CreateTime,
+                CreateTime = new DateTime(),
                 IpAddress = IPAddress.Parse(input.IpAddress),
                 Title = input.Title,
                 TypeId = input.TypeId,
