@@ -21,8 +21,8 @@ namespace mengtylulu.Controllers.BlogApi
                 CreateTime = new DateTime(),
                 IpAddress = IPAddress.Parse(input.IpAddress),
                 Title = input.Title,
-                TypeId = input.TypeId,
-                UpdateTime = input.UpdateTime,
+                TypeId = new Guid(),
+                UpdateTime = new DateTime(),
             };
             var res = await blogDB.InsertAsync(blog);
             return res;
