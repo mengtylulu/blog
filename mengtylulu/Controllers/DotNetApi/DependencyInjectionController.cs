@@ -69,5 +69,15 @@ namespace mengtylulu.Controllers.DotNetApi
             }
 
         }
+
+        /// <summary>
+        ///  排他注入模式
+        /// </summary>
+        /// <param name="testSingleton"></param>
+        [HttpGet]
+        public void GenericTemplateMode([FromServices] ITestGeneric<string> testGeneric)
+        {
+            Console.WriteLine("hello");
+        }
     }
 }

@@ -36,6 +36,14 @@ builder.Services.AddScoped<IStudentService, StudentService>();
 builder.Services.TryAddEnumerable(ServiceDescriptor.Singleton<IStudentService, StudentServiceEx>());
 builder.Services.TryAddEnumerable(ServiceDescriptor.Singleton<IStudentService, StudentServiceEx>());
 
+//删除服务 后续不能注册
+//builder.Services.RemoveAll<IStudentService>();
+
+//替换服务, 
+builder.Services.Replace(ServiceDescriptor.Singleton<IStudentService,StudentServiceEx>());
+
+//泛型模板注册
+builder.Services.AddScoped(typeof(ITestGeneric<>),typeof(TestGeneric<>));
 
 //跨域
 builder.Services.AddCors(options =>
