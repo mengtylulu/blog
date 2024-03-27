@@ -11,9 +11,14 @@ builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
-builder.Services.AddScoped<ITestScoped, TestScoped>();
-builder.Services.AddSingleton<ITestSingleton, TestSingleton>();
-builder.Services.AddTransient<ITestTransient, TestTransient>();
+//常规注入
+//builder.Services.AddScoped<ITestScoped, TestScoped>();
+//builder.Services.AddSingleton<ITestSingleton, TestSingleton>();
+//builder.Services.AddTransient<ITestTransient, TestTransient>();
+
+//实例注入模式-不推荐
+builder.Services.AddSingleton<ITestScoped>(new TestScoped());
+builder.Services.AddSingleton(new TestScoped() { name = "mty" });
 
 //跨域
 builder.Services.AddCors(options =>
