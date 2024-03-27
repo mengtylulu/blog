@@ -33,12 +33,41 @@ namespace mengtylulu.Controllers.DotNetApi
         /// <param name="testSingleton1"></param>
         /// <param name="testSingleton2"></param>
         [HttpGet]
-        public void TestInstantiationSingleton(
+        public void InstantiationSingleton(
             [FromServices] TestScoped testScoped
             )
         {
             Console.WriteLine($"==========Request Start==========");
             Console.WriteLine($"testScoped1 HashCode:{testScoped.GetHashCode()}");
+        }
+
+        /// <summary>
+        ///  工厂模式
+        /// </summary>
+        /// <param name="testSingleton"></param>
+        [HttpGet]
+        public void FactoryMode([FromServices] TestSingleton testSingleton)
+        {
+            Console.WriteLine($"{testSingleton.GetHashCode()}");
+        }
+
+        /// <summary>
+        ///  排他注入模式
+        /// </summary>
+        /// <param name="testSingleton"></param>
+        [HttpGet]
+        public void ExclusiveInjectionMode([FromServices] IEnumerable<IUserService> IUserServiceList
+            , [FromServices] IEnumerable<IStudentService> IStudentService)
+        {
+            foreach (var item in IUserServiceList)
+            {
+                item.Show();
+            }
+            foreach (var item in IStudentService)
+            {
+                item.Show();
+            }
+
         }
     }
 }

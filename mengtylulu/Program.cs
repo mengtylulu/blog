@@ -1,6 +1,7 @@
 using mengtylulu;
 using mengtylulu.ApiModel.DotNet.DependencyInjection.Interface;
 using mengtylulu.ApiModel.DotNet.DependencyInjection.Model;
+using Microsoft.Extensions.DependencyInjection.Extensions;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -17,8 +18,24 @@ builder.Services.AddSwaggerGen();
 //builder.Services.AddTransient<ITestTransient, TestTransient>();
 
 //实例注入模式-不推荐
-builder.Services.AddSingleton<ITestScoped>(new TestScoped());
-builder.Services.AddSingleton(new TestScoped() { name = "mty" });
+//builder.Services.AddSingleton<ITestScoped>(new TestScoped());
+//builder.Services.AddSingleton(new TestScoped() { name = "mty" });
+
+//工厂模式
+//builder.Services.AddScoped(provider => { return new TestScoped(); });
+//builder.Services.AddSingleton(provider => { return new TestSingleton(); });
+//builder.Services.AddTransient(provider => { return new TestTransient(); });
+
+//排他注入模式
+//如果IUserService已经注册，通过Try***就不会注册成功了:不管实现，只要是同一个类型就不能注册
+builder.Services.AddScoped<IUserService, UserService>();
+builder.Services.TryAddScoped<IUserService, UserServiceEx>();
+builder.Services.TryAddScoped<IUserService, UserServiceEx>();
+//只要是不同实现就能注册成功，同一个接口的相同实现就不能注册成功
+builder.Services.AddScoped<IStudentService, StudentService>();
+builder.Services.TryAddEnumerable(ServiceDescriptor.Singleton<IStudentService, StudentServiceEx>());
+builder.Services.TryAddEnumerable(ServiceDescriptor.Singleton<IStudentService, StudentServiceEx>());
+
 
 //跨域
 builder.Services.AddCors(options =>
