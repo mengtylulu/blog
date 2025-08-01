@@ -13,7 +13,7 @@
         /// </summary>
         /// <param name="id"></param>
         /// <returns></returns>
-        Task<T?> GetByIdAsync(int id);
+        Task<T?> GetByIdAsync(Guid id);
 
         /// <summary>
         /// 插入

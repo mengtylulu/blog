@@ -41,7 +41,8 @@ namespace mengtylulu.Controllers.BlogApi
         [HttpPost]
         public async Task<IActionResult> GetBlog(getBlogInput input)
         {
-            var directory = _directory.GetByIdAsync("268cdb3b-6014-4291-8131-dc3d6e0bf95d");
+            var directory =await _directory.GetByIdAsync(Guid.Parse("268cdb3b-6014-4291-8131-dc3d6e0bf95d"));
+            await Task.CompletedTask;
             return Ok(directory);
         }
 

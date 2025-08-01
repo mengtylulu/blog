@@ -6,7 +6,7 @@ using Microsoft.Extensions.Options;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 
-public class DirectoryRepository : IDirectoryRepository
+public class DirectoryRepository 
 {
     private readonly ConnectionSetting? _connection;
     public DirectoryRepository(IOptions<ConnectionSetting> connection)
