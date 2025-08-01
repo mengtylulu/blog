@@ -1,11 +1,39 @@
 using mengtylulu;
 using mengtylulu.ApiModel.DotNet.DependencyInjection.Interface;
 using mengtylulu.ApiModel.DotNet.DependencyInjection.Model;
+using mengtylulu.Infrastructure;
+using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.DependencyInjection.Extensions;
+using Npgsql;
+using System.Data.SqlTypes;
+using System.Globalization;
 
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
+
+//设置全局的时间格式为yyyy-MM-dd HH:mm:ss(ISO 标准格式)
+void ConfigureGlobalDateTimeFormat()
+ {
+    CultureInfo cultureInfo = (CultureInfo)CultureInfo.InvariantCulture.Clone();
+    cultureInfo.DateTimeFormat.ShortDatePattern = "yyyy-MM-dd";
+    cultureInfo.DateTimeFormat.LongTimePattern = "HH:mm:ss";
+    cultureInfo.DateTimeFormat.ShortTimePattern = "HH:mm:ss";
+
+    //设置全局默认文化
+    CultureInfo.DefaultThreadCurrentCulture = cultureInfo;
+    CultureInfo.DefaultThreadCurrentUICulture = cultureInfo;
+
+    Thread.CurrentThread.CurrentCulture = cultureInfo;
+    Thread.CurrentThread.CurrentUICulture = cultureInfo;
+}
+ConfigureGlobalDateTimeFormat();
+
+// Connection DB
+//var connectionstring = builder.Configuration.GetConnectionString("PostgreSqlConnection");
+//builder.Services.AddSingleton(connectionString??string.Empty);
+
+builder.Services.Configure<ConnectionSetting>(builder.Configuration.GetSection("PostgreSqlConnection"));
 
 builder.Services.AddControllers();
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
@@ -13,9 +41,10 @@ builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
 //常规注入
-//builder.Services.AddScoped<ITestScoped, TestScoped>();
-//builder.Services.AddSingleton<ITestSingleton, TestSingleton>();
-//builder.Services.AddTransient<ITestTransient, TestTransient>();
+builder.Services.AddScoped<ITestScoped, TestScoped>();
+builder.Services.AddScoped<IAnimal, Cat>();
+builder.Services.AddSingleton<ITestSingleton, TestSingleton>();
+builder.Services.AddTransient<ITestTransient, TestTransient>();
 
 //实例注入模式-不推荐
 //builder.Services.AddSingleton<ITestScoped>(new TestScoped());

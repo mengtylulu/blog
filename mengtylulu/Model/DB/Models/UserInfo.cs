@@ -1,6 +1,6 @@
 ﻿using System.Data.SqlTypes;
 
-namespace mengtylulu.DB.Models
+namespace mengtylulu.Model.DB.Models
 {
     public class UserInfo
     {

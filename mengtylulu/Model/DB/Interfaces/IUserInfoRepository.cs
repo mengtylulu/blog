@@ -1,6 +1,6 @@
-﻿using mengtylulu.DB.Models;
+﻿using mengtylulu.Model.DB.Models;
 
-namespace mengtylulu.DB.Interfaces
+namespace mengtylulu.Model.DB.Interfaces
 {
     public interface IUserInfoRepository
     {

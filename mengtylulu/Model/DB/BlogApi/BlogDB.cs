@@ -1,8 +1,8 @@
-﻿using mengtylulu.DB.Constans;
-using mengtylulu.DB.Models;
+﻿using mengtylulu.Model.DB.Constans;
+using mengtylulu.Model.DB.Models;
 using Npgsql;
 
-namespace mengtylulu.DB.BlogApi
+namespace mengtylulu.Model.DB.BlogApi
 {
     public class BlogDB
     {

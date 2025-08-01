@@ -1,6 +1,6 @@
 ﻿using System.Net;
 
-namespace mengtylulu.DB.Models
+namespace mengtylulu.Model.DB.Models
 {
     /// <summary>
     /// 博客

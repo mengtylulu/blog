@@ -8,11 +8,15 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="Npgsql" Version="8.0.1" />
+    <PackageReference Include="Npgsql" Version="9.0.3" />
     <PackageReference Include="Swashbuckle.AspNetCore" Version="6.4.0" />
   </ItemGroup>
 
   <ItemGroup>
+    <Folder Include="Filters\" />
+    <Folder Include="Extensions\" />
+    <Folder Include="DTOs\" />
+    <Folder Include="Services\" />
     <Folder Include="Test\" />
   </ItemGroup>
 

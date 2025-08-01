@@ -1,12 +1,12 @@
 ﻿using mengtylulu.ApiModel.BlogApi;
 using mengtylulu.ApiModel.DotNet.DependencyInjection.Interface;
-using mengtylulu.DB.BlogApi;
-using mengtylulu.DB.Interfaces;
-using mengtylulu.DB.Models;
+using mengtylulu.Model.DB.Interfaces;
 using Microsoft.AspNetCore.Mvc;
 using System.ComponentModel;
 using System.Net;
-
+using mengtylulu.ADO.NET;
+using mengtylulu.Model.DB.BlogApi;
+using mengtylulu.Model.DB.Models;
 namespace mengtylulu.Controllers.BlogApi
 {
     [ApiController]
@@ -32,6 +32,16 @@ namespace mengtylulu.Controllers.BlogApi
             return res;
         }
 
+        [HttpPost]
+        public void GetBlog(getBlogInput input)
+        {
+        }
 
+        [HttpPost]
+        public void TestDB(getBlogInput input)
+        {
+            Connect connect = new Connect();
+            connect.testConnect();
+        }
     }
 }

@@ -1,6 +1,3 @@
-using mengtylulu.DB.Interfaces;
-using mengtylulu.DB.Models;
-using mengtylulu.DB.Repositories;
 using Microsoft.AspNetCore.Mvc;
 
 namespace mengtylulu.Controllers
@@ -16,19 +13,20 @@ namespace mengtylulu.Controllers
 
         private readonly ILogger<WeatherForecastController> _logger;
         private readonly IAnimal _IAnimal;
+        private readonly string connect;
 
-
-        public WeatherForecastController(ILogger<WeatherForecastController> logger, IAnimal animal)
+        public WeatherForecastController(ILogger<WeatherForecastController> logger, IAnimal iAnimal,string test)
         {
+            this.connect = test;
             _logger = logger;
-            _IAnimal = animal;
+            _IAnimal = iAnimal;
         }
 
         [HttpGet(Name = "GetWeatherForecast")]
         public IEnumerable<WeatherForecast> Get()
         {
 
-
+            var conn = this.connect;
             var test = _IAnimal.say();
             return Enumerable.Range(1, 5).Select(index => new WeatherForecast
             {

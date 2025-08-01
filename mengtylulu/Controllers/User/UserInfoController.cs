@@ -1,7 +1,7 @@
 ﻿using mengtylulu.ApiModel;
-using mengtylulu.DB.Interfaces;
-using mengtylulu.DB.Models;
-using mengtylulu.DB.Repositories;
+using mengtylulu.Model.DB.Repositories;
+using mengtylulu.Model.DB.Interfaces;
+using mengtylulu.Model.DB.Models;
 using Microsoft.AspNetCore.Mvc;
 
 namespace mengtylulu.Controllers.User

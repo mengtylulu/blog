@@ -1,4 +1,4 @@
-﻿namespace mengtylulu.DB.Constans
+﻿namespace mengtylulu.Model.DB.Constans
 {
     public class DbConstans
     {

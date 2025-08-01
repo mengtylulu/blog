@@ -1,9 +1,9 @@
-﻿using mengtylulu.DB.Constans;
-using mengtylulu.DB.Interfaces;
-using mengtylulu.DB.Models;
+﻿using mengtylulu.Model.DB.Constans;
+using mengtylulu.Model.DB.Interfaces;
+using mengtylulu.Model.DB.Models;
 using Npgsql;
 
-namespace mengtylulu.DB.Repositories
+namespace mengtylulu.Model.DB.Repositories
 {
     public class UserInfoRepository : IUserInfoRepository
     {
