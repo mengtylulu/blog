@@ -1,6 +1,7 @@
 using mengtylulu;
 using mengtylulu.ApiModel.DotNet.DependencyInjection.Interface;
 using mengtylulu.ApiModel.DotNet.DependencyInjection.Model;
+using mengtylulu.Data;
 using mengtylulu.Infrastructure;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.DependencyInjection.Extensions;
@@ -37,7 +38,8 @@ builder.Services.AddSingleton<NpgsqlDataSource>(sp =>
     return NpgsqlDataSource.Create(connectionString ?? string.Empty);
 });
 
-//builder.Services.AddScoped<IpostRe>();
+//×¢²áÍ¨ÓÃ²Ö´¢
+builder.Services.AddScoped(typeof(IRepository<>), typeof(Repository<>));
 
 builder.Services.AddControllers();
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle

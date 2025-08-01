@@ -26,7 +26,7 @@ namespace mengtylulu.Data
             throw new NotImplementedException();
         }
 
-        public async Task<T> GetByIdAsync(int id)
+        public async Task<T?> GetByIdAsync(int id)
         {
             using var cmd = _dataSource.CreateCommand($"SELECT * FROM {this._tableName} WHERE id= @ID");
             cmd.Parameters.AddWithValue("@ID", id);

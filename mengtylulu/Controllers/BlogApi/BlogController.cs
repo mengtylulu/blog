@@ -7,13 +7,19 @@ using System.Net;
 using mengtylulu.ADO.NET;
 using mengtylulu.Model.DB.BlogApi;
 using mengtylulu.Model.DB.Models;
+using mengtylulu.Data;
+using mengtylulu.Model;
 namespace mengtylulu.Controllers.BlogApi
 {
     [ApiController]
     [Route("[controller]/[action]")]
     public class BlogController : ControllerBase
     {
-
+        private readonly IRepository<mengtylulu.Model.Directory> _directory;
+        public BlogController(IRepository<mengtylulu.Model.Directory> directory)
+        {
+                this._directory = directory;
+        }
         [HttpPost]
         public async Task<int> InsertBlog(InsertBlogInput input)
         {
@@ -33,8 +39,10 @@ namespace mengtylulu.Controllers.BlogApi
         }
 
         [HttpPost]
-        public void GetBlog(getBlogInput input)
+        public async Task<IActionResult> GetBlog(getBlogInput input)
         {
+            var directory = _directory.GetByIdAsync("268cdb3b-6014-4291-8131-dc3d6e0bf95d");
+            return Ok(directory);
         }
 
         [HttpPost]
