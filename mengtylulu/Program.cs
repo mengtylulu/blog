@@ -14,7 +14,7 @@ var builder = WebApplication.CreateBuilder(args);
 
 //设置全局的时间格式为yyyy-MM-dd HH:mm:ss(ISO 标准格式)
 void ConfigureGlobalDateTimeFormat()
- {
+{
     CultureInfo cultureInfo = (CultureInfo)CultureInfo.InvariantCulture.Clone();
     cultureInfo.DateTimeFormat.ShortDatePattern = "yyyy-MM-dd";
     cultureInfo.DateTimeFormat.LongTimePattern = "HH:mm:ss";
@@ -30,10 +30,14 @@ void ConfigureGlobalDateTimeFormat()
 ConfigureGlobalDateTimeFormat();
 
 // Connection DB
-//var connectionstring = builder.Configuration.GetConnectionString("PostgreSqlConnection");
-//builder.Services.AddSingleton(connectionString??string.Empty);
+//builder.Services.Configure<ConnectionSetting>(builder.Configuration.GetSection("PostgreSqlConnection"));
+builder.Services.AddSingleton<NpgsqlDataSource>(sp =>
+{
+    var connectionString = builder.Configuration.GetConnectionString("PostgreSqlConnection");
+    return NpgsqlDataSource.Create(connectionString ?? string.Empty);
+});
 
-builder.Services.Configure<ConnectionSetting>(builder.Configuration.GetSection("PostgreSqlConnection"));
+//builder.Services.AddScoped<IpostRe>();
 
 builder.Services.AddControllers();
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
@@ -69,10 +73,10 @@ builder.Services.TryAddEnumerable(ServiceDescriptor.Singleton<IStudentService, S
 //builder.Services.RemoveAll<IStudentService>();
 
 //替换服务, 
-builder.Services.Replace(ServiceDescriptor.Singleton<IStudentService,StudentServiceEx>());
+builder.Services.Replace(ServiceDescriptor.Singleton<IStudentService, StudentServiceEx>());
 
 //泛型模板注册
-builder.Services.AddScoped(typeof(ITestGeneric<>),typeof(TestGeneric<>));
+builder.Services.AddScoped(typeof(ITestGeneric<>), typeof(TestGeneric<>));
 
 //跨域
 builder.Services.AddCors(options =>

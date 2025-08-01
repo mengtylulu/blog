@@ -1,39 +1,39 @@
 ﻿namespace mengtylulu.Data
 {
-    public interface IRepository<T>
+    public interface IRepository<T> where T : class
     {
         /// <summary>
         /// 获取所有值
         /// </summary>
         /// <returns></returns>
-        Task<IEnumerable<T>> GetAll();
+        Task<IEnumerable<T>> GetAllAsync();
 
         /// <summary>
-        /// 通过id 获取数据
+        /// 根据id查询
         /// </summary>
         /// <param name="id"></param>
         /// <returns></returns>
-        Task<T> GetById(int id);
+        Task<T> GetByIdAsync(int id);
 
         /// <summary>
-        /// 创建
+        /// 插入
         /// </summary>
         /// <param name="Entity"></param>
         /// <returns></returns>
-        Task<T> Create(T Entity);
+        Task<T> InsertAsync(T Entity);
 
         /// <summary>
         /// 更新
         /// </summary>
         /// <param name="Entity"></param>
         /// <returns></returns>
-        Task<T> Update(T Entity);
+        Task<T> UpdateAsync(T Entity);
 
         /// <summary>
         /// 删除
         /// </summary>
         /// <param name="id"></param>
         /// <returns></returns>
-        Task<T> Delete(int id);
+        Task<T> DeleteAsync(int id);
     }
 }
