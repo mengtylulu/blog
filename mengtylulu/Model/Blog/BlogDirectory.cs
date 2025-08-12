@@ -1,6 +1,6 @@
-﻿namespace mengtylulu.Model
+﻿namespace mengtylulu.Model.BlogApi
 {
-    public class Directory
+    public class BlogDirectory
     {
         /// <summary>
         /// id
@@ -8,7 +8,6 @@
         public Guid id { get; set; }
 
         /// <summary>
-        /// 标题
         /// </summary>
         public string title { get; set; } = string.Empty;
 

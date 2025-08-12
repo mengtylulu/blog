@@ -1,10 +1,12 @@
-﻿
+﻿using Microsoft.OpenApi.Models;
 using Microsoft.VisualBasic;
 using Npgsql;
 using Swashbuckle.AspNetCore.SwaggerGen;
+using System.ComponentModel;
 using System.Reflection;
+using System.Text;
 
-namespace mengtylulu.Data
+namespace mengtylulu.Infrastructure
 {
     public class Repository<T> : IRepository<T> where T : class, new()
     {
@@ -12,8 +14,8 @@ namespace mengtylulu.Data
         private readonly string _tableName;
         public Repository(NpgsqlDataSource dataSource)
         {
-            this._dataSource = dataSource;
-            this._tableName = typeof(T).Name.ToLower();
+            _dataSource = dataSource;
+            _tableName = typeof(T).Name.ToLower();
         }
 
         public Task<T> DeleteAsync(int id)
@@ -28,7 +30,7 @@ namespace mengtylulu.Data
 
         public async Task<T?> GetByIdAsync(Guid id)
         {
-            using var cmd = _dataSource.CreateCommand($"SELECT * FROM {this._tableName} WHERE id= @ID");
+            using var cmd = _dataSource.CreateCommand($"SELECT * FROM {_tableName} WHERE id= @ID");
             cmd.Parameters.AddWithValue("@ID", id);
             using var reader = cmd.ExecuteReader();
 
@@ -77,14 +79,45 @@ namespace mengtylulu.Data
                 //6.给属性赋值
                 property.SetValue(entity, convertedValue);
             }
-
-
             return entity;
         }
 
-        public Task<T> InsertAsync(T Entity)
+        public async Task<T> InsertAsync(T Entity)
         {
-            throw new NotImplementedException();
+            if (Entity == null)
+                throw new ArgumentNullException(nameof(Entity), "参数不能为null");
+
+            using var cmd = _dataSource.CreateCommand("INSERT INTO @table_name");
+            Type entityType = typeof(T);
+
+            cmd.Parameters.AddWithValue("@table_name", ConvertPropertyNameToColumnName(entityType.Name));
+            var properties = entityType.GetProperties();
+
+            IDictionary<string, object?> dic = new Dictionary<string, object?>();
+            foreach (var property in properties)
+            {
+                Type type = property.GetType();
+                //值类型
+                if (type.IsValueType)
+                {
+                    object? value = property.GetValue(Entity);
+                    dic.Add(property.Name, value);
+                }
+                //引用类型
+                if (type.IsClass)
+                {
+                    object? value = property.GetValue(Entity);
+                    dic.Add(property.Name, value);
+                }
+            }
+
+            var str = dic.SelectMany((k,v) => k.ToString());
+            var str2 = dic.Select((k,v) => k.ToString());
+            StringBuilder insertColumnName= new StringBuilder();
+            var test = cmd.CommandText;
+
+            await Task.CompletedTask;
+            return null;
         }
 
         public Task<T> UpdateAsync(T Entity)
@@ -101,6 +134,27 @@ namespace mengtylulu.Data
                 .Select(part => part.Length > 0
                 ? char.ToUpper(part[0]) + part.Substring(1).ToLower()
                 : part));
+        }
+
+        //辅助方法:将数据库列名(下划线命名)转换为属性名(帕斯卡命名)
+        //例 "UserName" -> "user_name","CreateTime"->"create_time"
+        private string ConvertPropertyNameToColumnName(string propertyName)
+        {
+            if (string.IsNullOrEmpty(propertyName))
+                return propertyName;
+            var result = new StringBuilder();
+            result.Append(char.ToLower(propertyName[0]));
+            for (int i = 1; i < propertyName.Length; i++)
+            {
+                if (char.IsUpper(propertyName[i]))
+                {
+                    result.Append("_");
+                    result.Append(char.ToLower(propertyName[i]));
+                }
+                else
+                    result.Append(propertyName[i]);
+            }
+            return result.ToString();
         }
 
         //辅助方法:将数据库值转换为属性所需的类型

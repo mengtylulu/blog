@@ -13,9 +13,10 @@
   </ItemGroup>
 
   <ItemGroup>
+    <Folder Include="Data\" />
+    <Folder Include="DTOs\" />
     <Folder Include="Filters\" />
     <Folder Include="Extensions\" />
-    <Folder Include="DTOs\" />
     <Folder Include="Services\" />
     <Folder Include="Test\" />
   </ItemGroup>
