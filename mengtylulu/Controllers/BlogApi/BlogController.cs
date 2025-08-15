@@ -17,9 +17,9 @@ namespace mengtylulu.Controllers.BlogApi
         }
 
         [HttpPost]
-        public async Task<int> InsertDirectoryAsync(InsertDirectoryDto insertDirectoryDto)
+        public async Task<bool> InsertDirectoryAsync(InsertDirectoryDto insertDirectoryDto)
         {
-            var directory = await _directory.InsertAsync(new BlogDirectory
+            var isInsert = await _directory.InsertAsync(new BlogDirectory
             {
                 id = Guid.NewGuid(),
                 introduction = insertDirectoryDto.Introduction,
@@ -27,8 +27,7 @@ namespace mengtylulu.Controllers.BlogApi
                 time_update = insertDirectoryDto.TimeUpdate,
                 title = insertDirectoryDto.Title,
             });
-            await Task.CompletedTask;
-            return 0;
+            return isInsert;
         }
 
         [HttpPost]

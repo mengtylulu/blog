@@ -20,7 +20,7 @@
         /// </summary>
         /// <param name="Entity"></param>
         /// <returns></returns>
-        Task<T> InsertAsync(T Entity);
+        Task<bool> InsertAsync(T Entity);
 
         /// <summary>
         /// 更新

@@ -1,4 +1,5 @@
-﻿using Microsoft.OpenApi.Models;
+﻿using Microsoft.Extensions.Primitives;
+using Microsoft.OpenApi.Models;
 using Microsoft.VisualBasic;
 using Npgsql;
 using Swashbuckle.AspNetCore.SwaggerGen;
@@ -82,42 +83,62 @@ namespace mengtylulu.Infrastructure
             return entity;
         }
 
-        public async Task<T> InsertAsync(T Entity)
+        public async Task<bool> InsertAsync(T Entity)
         {
             if (Entity == null)
                 throw new ArgumentNullException(nameof(Entity), "参数不能为null");
 
-            using var cmd = _dataSource.CreateCommand("INSERT INTO @table_name");
             Type entityType = typeof(T);
+            var tableName = SqlHelp.ConvertStringToPgsqlName(entityType.Name);
+            //using var cmd = _dataSource.CreateCommand($"INSERT INTO {ConvertPropertyNameToColumnName(entityType.Name)}");
 
-            cmd.Parameters.AddWithValue("@table_name", ConvertPropertyNameToColumnName(entityType.Name));
-            var properties = entityType.GetProperties();
+            //获取实体属性
+            var properties = entityType.GetProperties(BindingFlags.Public | BindingFlags.Instance)
+                .Where(p => p.CanRead && p.CanWrite)
+                .ToList();
 
-            IDictionary<string, object?> dic = new Dictionary<string, object?>();
+            if (!properties.Any())
+                throw new InvalidOperationException("实体没有可读写的公共属性");
+
+            var columnNames = new List<string>();
+            var parameterNames = new List<string>();
+            var parameters = new List<NpgsqlParameter>();
+
             foreach (var property in properties)
             {
-                Type type = property.GetType();
-                //值类型
-                if (type.IsValueType)
+                //获取实体类型
+                Type propertyType = property.PropertyType;
+
+                //获取属性值
+                object? value = property.GetValue(Entity);
+
+                //列明转义(处理特殊字符)
+                string columnName = SqlHelp.ConvertStringToPgsqlName(property.Name);
+                columnNames.Add(columnName);
+
+                //参数名
+                string paramName = $"@{property.Name}";
+                parameterNames.Add(paramName);
+
+                //创建参数
+                var param = new NpgsqlParameter(paramName, value ?? DBNull.Value)
                 {
-                    object? value = property.GetValue(Entity);
-                    dic.Add(property.Name, value);
-                }
-                //引用类型
-                if (type.IsClass)
-                {
-                    object? value = property.GetValue(Entity);
-                    dic.Add(property.Name, value);
-                }
+                    NpgsqlDbType = SqlHelp.GetNpgsqlDbType(propertyType)
+                };
+                parameters.Add(param);
             }
 
-            var str = dic.SelectMany((k,v) => k.ToString());
-            var str2 = dic.Select((k,v) => k.ToString());
-            StringBuilder insertColumnName= new StringBuilder();
-            var test = cmd.CommandText;
+            //构建完整sql语句
+            string sql = $@"INSERT INTO {tableName} ({string.Join(",", columnNames)}) VALUES ({string.Join(",", parameterNames)})";
 
-            await Task.CompletedTask;
-            return null;
+            using var cmd = _dataSource.CreateCommand(sql);
+            //添加所有参数(防止sql注入)
+            cmd.Parameters.AddRange(parameters.ToArray());
+
+            //执行
+            int affectedRows = await cmd.ExecuteNonQueryAsync();
+
+            return affectedRows > 0;
         }
 
         public Task<T> UpdateAsync(T Entity)
@@ -136,26 +157,7 @@ namespace mengtylulu.Infrastructure
                 : part));
         }
 
-        //辅助方法:将数据库列名(下划线命名)转换为属性名(帕斯卡命名)
-        //例 "UserName" -> "user_name","CreateTime"->"create_time"
-        private string ConvertPropertyNameToColumnName(string propertyName)
-        {
-            if (string.IsNullOrEmpty(propertyName))
-                return propertyName;
-            var result = new StringBuilder();
-            result.Append(char.ToLower(propertyName[0]));
-            for (int i = 1; i < propertyName.Length; i++)
-            {
-                if (char.IsUpper(propertyName[i]))
-                {
-                    result.Append("_");
-                    result.Append(char.ToLower(propertyName[i]));
-                }
-                else
-                    result.Append(propertyName[i]);
-            }
-            return result.ToString();
-        }
+
 
         //辅助方法:将数据库值转换为属性所需的类型
         private object? ConvertValueToPropertyType(object value, Type targetType)
