@@ -8,19 +8,31 @@ namespace mengtylulu.Converters
     {
         public override DateTime Read(ref Utf8JsonReader reader, Type typeToConvert, JsonSerializerOptions options)
         {
-            //解析逻辑
-            if (DateTime.TryParse(reader.GetString(), CultureInfo.InvariantCulture, DateTimeStyles.AdjustToUniversal, out DateTime dateTime))
+            var timeStr = reader.GetString();
+            
+            //解析
+            if (!DateTime.TryParse(reader.GetString(), CultureInfo.InvariantCulture, DateTimeStyles.AdjustToUniversal, out DateTime dateTime))
+                throw new JsonException($"无法解析时间:{reader.GetString()}");
+
+
+            //时间格式为设置为 yyyy-MM-dd HH:mm:ss (ISO 标准格式)
+            DateTime time = new DateTime(
+               dateTime.Year,
+               dateTime.Month,
+               dateTime.Day,
+               dateTime.Hour,
+               dateTime.Minute,
+               dateTime.Second,
+               dateTime.Kind
+               );
+
+            //若类型为Utc(Coordinated Universal Time) 或 Unspecified 全部转换为 本地时间
+            return time.Kind switch
             {
-                if (dateTime.Kind == DateTimeKind.Unspecified)
-                {
-                    return DateTime.SpecifyKind(dateTime, DateTimeKind.Local);
-                }
-                if (dateTime.Kind == DateTimeKind.Utc)
-                {
-                    return dateTime.ToLocalTime();
-                }
-            }
-            return reader.GetDateTime();
+                DateTimeKind.Utc => time.ToLocalTime(),
+                DateTimeKind.Unspecified => DateTime.SpecifyKind(time, DateTimeKind.Local),
+                _ => time
+            };
         }
 
         public override void Write(Utf8JsonWriter writer, DateTime value, JsonSerializerOptions options)
