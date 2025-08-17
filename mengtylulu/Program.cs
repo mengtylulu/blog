@@ -1,4 +1,5 @@
 using mengtylulu;
+using mengtylulu.Converters;
 using mengtylulu.Infrastructure;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.DependencyInjection.Extensions;
@@ -26,6 +27,15 @@ void ConfigureGlobalDateTimeFormat()
     Thread.CurrentThread.CurrentUICulture = cultureInfo;
 }
 ConfigureGlobalDateTimeFormat();
+
+//配置控制器并设置JSON 序列化选项
+builder.Services.AddControllers().AddJsonOptions(options =>
+{
+    // 设置 DateTime 解析规则：
+    // 1. 带时区的时间（如含 Z 或 +08:00）→ 转换为 Local 时间
+    // 2. 无时区的时间 → 视为 Local 时间
+    options.JsonSerializerOptions.Converters.Add(new DateTimeConverterWithLocalTime());
+});
 
 // Connection DB
 //builder.Services.Configure<ConnectionSetting>(builder.Configuration.GetSection("PostgreSqlConnection"));

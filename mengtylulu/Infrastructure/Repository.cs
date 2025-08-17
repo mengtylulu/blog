@@ -123,7 +123,7 @@ namespace mengtylulu.Infrastructure
                 //创建参数
                 var param = new NpgsqlParameter(paramName, value ?? DBNull.Value)
                 {
-                    NpgsqlDbType = SqlHelp.GetNpgsqlDbType(propertyType)
+                    NpgsqlDbType = SqlHelp.GetNpgsqlDbType(propertyType, value)
                 };
                 parameters.Add(param);
             }

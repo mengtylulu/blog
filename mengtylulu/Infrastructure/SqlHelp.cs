@@ -50,18 +50,27 @@ namespace mengtylulu.Infrastructure
         /// </summary>
         /// <param name="type"></param>
         /// <returns></returns>
-        public static NpgsqlDbType GetNpgsqlDbType(Type type)
+        public static NpgsqlDbType GetNpgsqlDbType(Type type, object? value)
         {
             //类型映射官网
             //https://www.npgsql.org/doc/types/basic.html 
             if (type == null)
-                throw new ArgumentNullException(nameof(type),"类型不能为nul");
+                throw new ArgumentNullException(nameof(type), "类型不能为nul");
             Type underlyingType = Nullable.GetUnderlyingType(type) ?? type;
+
+
+            if (underlyingType == typeof(DateTime))
+            {
+                if (value is DateTime dateTime && dateTime.Kind == DateTimeKind.Utc)
+                    return NpgsqlDbType.TimestampTz;
+                return NpgsqlDbType.Timestamp;
+            }
+
             return underlyingType switch
             {
                 Type t when t == typeof(int) => NpgsqlDbType.Integer,
                 Type t when t == typeof(string) => NpgsqlDbType.Text,
-                Type t when t == typeof(DateTime) => NpgsqlDbType.Timestamp,
+                Type t when t == typeof(DateTimeOffset) => NpgsqlDbType.TimestampTz,
 
                 Type t when t == typeof(Guid) => NpgsqlDbType.Uuid,
                 Type t when t == typeof(bool) => NpgsqlDbType.Boolean,
