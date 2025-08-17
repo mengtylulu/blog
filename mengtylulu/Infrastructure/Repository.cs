@@ -29,6 +29,11 @@ namespace mengtylulu.Infrastructure
             throw new NotImplementedException();
         }
 
+        /// <summary>
+        /// 根据id获取
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns></returns>
         public async Task<T?> GetByIdAsync(Guid id)
         {
             using var cmd = _dataSource.CreateCommand($"SELECT * FROM {_tableName} WHERE id= @ID");
@@ -83,6 +88,13 @@ namespace mengtylulu.Infrastructure
             return entity;
         }
 
+        /// <summary>
+        /// 插入
+        /// </summary>
+        /// <param name="Entity">实体类</param>
+        /// <returns></returns>
+        /// <exception cref="ArgumentNullException"></exception>
+        /// <exception cref="InvalidOperationException"></exception>
         public async Task<bool> InsertAsync(T Entity)
         {
             if (Entity == null)

@@ -4,6 +4,7 @@ using System.Net;
 using mengtylulu.Infrastructure;
 using mengtylulu.Model.BlogApi;
 using mengtylulu.DTOs.Blog;
+using Microsoft.VisualBasic;
 namespace mengtylulu.Controllers.BlogApi
 {
     [ApiController]
@@ -31,16 +32,12 @@ namespace mengtylulu.Controllers.BlogApi
         }
 
         [HttpPost]
-        public async Task<IActionResult> GetDirectoryByIdAsync(BlogDirectoryPostDto postDto)
+        public async Task<IActionResult> GetDirectoryByIdAsync(Guid guid)
         {
             var directory = await _directory.GetByIdAsync(Guid.Parse("268cdb3b-6014-4291-8131-dc3d6e0bf95d"));
             await Task.CompletedTask;
             return Ok(directory);
         }
 
-        //[HttpPost]
-        //public void TestDB(getBlogInput input)
-        //{
-        //}
     }
 }
